@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
+group 'flaymed'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    google()
+
+    maven { url "https://repo.dmulloy2.net/nexus/repository/public/" }
+    maven { url 'https://plugins.gradle.org/m2/' }
+    maven { url 'https://repo.glaremasters.me/repository/concuncan/'}
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+
+        content {
+            includeGroup 'org.bukkit'
+            includeGroup 'org.spigotmc'
+        }
+    }
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/central' }
+    maven { url "https://ci.nametagedit.com/plugin/repository/everything/" }
+    maven { url 'https://jitpack.io' }
+    mavenLocal()
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: '*.jar')
+
+    compileOnly 'org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT'
+    implementation 'mysql:mysql-connector-java:8.0.30'
+    implementation 'org.reflections:reflections:0.10.2'
+    implementation 'com.google.code.gson:gson:2.10'
+
+    implementation 'com.comphenix.protocol:ProtocolLib:4.4.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+}
+
+test {
+    useJUnitPlatform()
+}
