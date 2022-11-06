@@ -1,2 +1,3 @@
 rootProject.name = 'cTechGames'
+include 'cTechCore'
 
