@@ -5,7 +5,9 @@ import com.ctechcore.listeners.BaseListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import java.util.Hashtable;
@@ -63,6 +65,14 @@ public class InventoryMenu extends BaseListener {
       case SHIFT_RIGHT -> invItem.onItemShiftRightClick(e);
     }
 
+  }
+
+  @EventHandler
+  public void inventoryCloseEvent(InventoryCloseEvent e) {
+    if (e.getInventory() != getInventory()) return;
+
+    HandlerList.unregisterAll(this);
+    getCore().getLogger().info("[LISTENER] Unregistered " + getClass().getSimpleName());
   }
 
 }

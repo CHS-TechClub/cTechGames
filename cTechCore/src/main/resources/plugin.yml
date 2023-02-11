@@ -1,4 +1,9 @@
 name: cTechGames
-main: com.ctechcore.Main
+main: com.ctechcore.CTechCore
 author: Mark Viggiano
 version: 1.0
+api-version: 1.19
+commands:
+  grant:
+    description: Grant a user a rank
+    usage: /grant <name>
