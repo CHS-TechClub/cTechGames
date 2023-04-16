@@ -1,4 +1,5 @@
 rootProject.name = 'cTechGames'
 include 'cTechCore'
 include 'Lobby'
+include 'cTechSMP'
 
