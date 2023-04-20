@@ -40,13 +40,27 @@ public class TechPlayer {
 
       String rank = (String) result.get("rank");
       this.rank = Rank.getRankByName(rank);
+
+      String team = (String) result.get("team");
+      this.team = CTechCore.getInstance().getTeamManager().getTeamByName(team);
+
       resetTitle();
     });
 
   }
 
   public void resetTitle() {
-    String title = String.format("%s%s%s %s%s%s", getRank().getColor(), ChatColor.BOLD, getRank().getName(), ChatColor.RESET, getTeam().getColor(), getPlayer().getName());
+    String title = String.format("%s[%s%s%s] %s%s%s%s %s",
+        ChatColor.GRAY,
+        getTeam().getColor(),
+        getTeam().getName(),
+        ChatColor.GRAY,
+        getRank().getColor(),
+        ChatColor.BOLD,
+        getRank().getName(),
+        ChatColor.RESET,
+        getPlayer().getName()
+    );
     this.title = title;
     getPlayer().setPlayerListName(title);
   }
@@ -62,6 +76,7 @@ public class TechPlayer {
   public void setTeam(Team team) {
     this.team = team;
     resetTitle();
+    CTechCore.getInstance().getDatabaseManager().saveTechPlayer(this);
   }
 
   public Rank getRank() {

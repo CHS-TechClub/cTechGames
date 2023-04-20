@@ -8,9 +8,11 @@ public class GroupInventory extends InventoryMenu {
 
   private final SMPPlayer smpPlayer;
 
-  public GroupInventory(CTechCore core, String name, int slots, SMPPlayer smpPlayer) {
-    super(core, name, slots);
+  public GroupInventory(SMPPlayer smpPlayer) {
+    super(CTechCore.getInstance(), smpPlayer.getTeam().getName(), 45);
 
     this.smpPlayer = smpPlayer;
+    addInventoryItem(0, new ModifyColorItem(smpPlayer.getTeam()));
+    addInventoryItem(8, new DeleteGroupItem(smpPlayer.getTeam()));
   }
 }

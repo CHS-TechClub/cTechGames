@@ -4,10 +4,8 @@ import static com.mongodb.client.model.Filters.eq;
 
 import com.ctechcore.CTechCore;
 import com.ctechcore.player.TechPlayer;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.ctechcore.teams.Team;
+import com.mongodb.client.*;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -24,11 +22,13 @@ public final class TechDatabaseManager {
   private final MongoClient mongoClient;
   private final MongoDatabase techDatabase;
   private final MongoCollection<Document> players;
+  private final MongoCollection<Document> teams;
 
   public TechDatabaseManager() {
     this.mongoClient = MongoClients.create("mongodb://127.0.0.1:27017");
     this.techDatabase = this.mongoClient.getDatabase("ctech");
     this.players = this.techDatabase.getCollection("players");
+    this.teams = this.techDatabase.getCollection("teams");
   }
 
   private MongoClient getMongoClient() {
@@ -43,8 +43,12 @@ public final class TechDatabaseManager {
     return players;
   }
 
+  public FindIterable<Document> getPlayerDataList() {
+    return getPlayers().find();
+  }
+
   public Document getTechPlayerData(UUID uuid) {
-    return getTechDatabase().getCollection("players").find(eq("uuid", uuid.toString())).first();
+    return getPlayers().find(eq("uuid", uuid.toString())).first();
   }
 
   public void saveTechPlayer(TechPlayer techPlayer) {
@@ -52,10 +56,42 @@ public final class TechDatabaseManager {
       Document query = new Document().append("uuid", techPlayer.getPlayer().getUniqueId().toString());
       Bson updates = Updates.combine(
           Updates.set("rank", techPlayer.getRank().getName()),
-          Updates.set("coins", techPlayer.getCoins())
+          Updates.set("coins", techPlayer.getCoins()),
+          Updates.set("team", techPlayer.getTeam().getName())
       );
       UpdateOptions options = new UpdateOptions().upsert(true); //insert if the document doesn't exist.
       getPlayers().updateOne(query, updates, options);
+    });
+  }
+
+  private MongoCollection<Document> getTeams() {
+    return teams;
+  }
+
+  public FindIterable<Document> getTeamDataList() {
+    return getTeams().find();
+  }
+
+  public Document getTeamData(String name) {
+    return getTeams().find(eq("name", name)).first();
+  }
+
+  public void saveTeam(Team team) {
+    Bukkit.getScheduler().runTaskAsynchronously(CTechCore.getInstance(), () -> {
+      Document query = new Document().append("name", team.getName());
+      Bson updates = Updates.combine(
+          Updates.set("leader", (team.getLeader() == null ? null : team.getLeader().toString())),
+          Updates.set("color", team.getColor().name())
+      );
+      UpdateOptions options = new UpdateOptions().upsert(true);
+      getTeams().updateOne(query, updates, options);
+    });
+  }
+
+  public void deleteTeam(Team team) {
+    Bukkit.getScheduler().runTaskAsynchronously(CTechCore.getInstance(), () -> {
+      Bson query = eq("name", team.getName());
+      getTeams().deleteOne(query);
     });
   }
 

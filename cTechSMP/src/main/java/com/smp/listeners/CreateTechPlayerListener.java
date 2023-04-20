@@ -8,8 +8,8 @@ import com.smp.player.SMPPlayer;
 import org.bukkit.event.EventHandler;
 
 public class CreateTechPlayerListener extends BaseListener {
-  public CreateTechPlayerListener(CTechCore plugin) {
-    super(plugin);
+  public CreateTechPlayerListener() {
+    super(CTechCore.getInstance());
   }
 
   @EventHandler

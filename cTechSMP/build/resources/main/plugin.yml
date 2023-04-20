@@ -1,0 +1,17 @@
+name: cTechSMP
+main: com.smp.SMP
+author: Mark Viggiano
+version: 1.0
+api-version: 1.19
+depend:
+  - cTechGames
+commands:
+  group:
+    description: View group information
+    usage: /group
+  g:
+    description: View group information
+    usage: /g
+  creategroup:
+    description: Create a group!
+    usage: /creategroup

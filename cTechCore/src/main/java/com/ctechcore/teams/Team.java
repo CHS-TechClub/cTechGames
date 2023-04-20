@@ -1,5 +1,6 @@
 package com.ctechcore.teams;
 
+import com.ctechcore.CTechCore;
 import com.ctechcore.player.TechPlayer;
 import org.bukkit.ChatColor;
 import java.util.Collection;
@@ -11,23 +12,59 @@ public class Team {
 
   //Use Hashtable for fast #contains
   private final Hashtable<UUID, TechPlayer> players;
-  private final String name;
-  private final ChatColor color;
+  private String name;
+  private ChatColor color;
+  private UUID leader;
 
-  public static final Team NONE = new Team("NONE", ChatColor.YELLOW);
+  public static final Team NONE = new Team("NONE", ChatColor.GRAY);
+  public static final Team RED = new Team("RED", ChatColor.RED);
+  public static final Team YELLOW = new Team("YELLOW", ChatColor.YELLOW);
+  public static final Team GREEN = new Team("GREEN", ChatColor.GREEN);
+  public static final Team BLUE = new Team("BLUE", ChatColor.BLUE);
 
   public Team(String name, ChatColor color) {
     this.name = name;
     this.color = color;
     this.players = new Hashtable<>();
+    this.leader = null; //this is for like mini games
+  }
+
+  public Team(String name, ChatColor color, UUID leader) {
+    this.name = name;
+    this.color = color;
+    this.players = new Hashtable<>();
+    this.leader = leader;
+    CTechCore.getInstance().getTeamManager().addTeam(this);
+  }
+
+  public boolean isLeader(UUID uuid) {
+    return uuid.equals(leader);
+  }
+
+  public void setLeader(UUID uuid) {
+    this.leader = uuid;
+  }
+
+  public UUID getLeader() {
+    return leader;
   }
 
   public String getName() {
     return name;
   }
 
+  public void setName(String name) {
+    this.name = name;
+  }
+
   public ChatColor getColor() {
     return color;
+  }
+
+  public void setColor(ChatColor color) {
+    this.color = color;
+    CTechCore.getInstance().getDatabaseManager().saveTeam(this);
+    for (TechPlayer techPlayer : getPlayers()) techPlayer.resetTitle();
   }
 
   public Collection<TechPlayer> getPlayers() {
