@@ -1,24 +1,26 @@
-package com.smp.menu.colorchangemenu;
+package com.smp.menu.groupmenu;
 
 import com.ctechcore.menu.InventoryItem;
 import com.ctechcore.teams.Team;
+import com.ctechcore.utils.ItemUtil;
+import com.smp.menu.invitemenu.InvitePlayerMenu;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import java.util.Arrays;
 
-public class ColoredItem implements InventoryItem {
+public class InvitePlayerItem implements InventoryItem {
 
   private int slot;
   private final Team team;
-  private final ItemStack item;
-  private final ChatColor color;
+  private static final ItemStack ITEM = ItemUtil.createItem(
+      Material.PLAYER_HEAD,
+      ChatColor.YELLOW + "" + ChatColor.BOLD + "Invite Player",
+      Arrays.asList(ChatColor.WHITE + "Click to invite a player to the group.", "", ChatColor.WHITE + "Only leaders can invite others!"));
 
-  public ColoredItem(Team team, ItemStack item, ChatColor color) {
+  public InvitePlayerItem(Team team) {
     this.team = team;
-    this.item = item;
-    this.color = color;
   }
 
   public Team getTeam() {
@@ -37,11 +39,7 @@ public class ColoredItem implements InventoryItem {
 
   @Override
   public ItemStack getItem() {
-    return item;
-  }
-
-  public ChatColor getColor() {
-    return color;
+    return ITEM;
   }
 
   @Override
@@ -66,9 +64,8 @@ public class ColoredItem implements InventoryItem {
 
   @Override
   public void onItemClick(InventoryClickEvent e) {
-    getTeam().setColor(getColor());
-    Player player = (Player) e.getWhoClicked();
-    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 3, 3);
-    player.closeInventory();
+    if (!getTeam().isLeader(e.getWhoClicked().getUniqueId())) return;
+
+    e.getWhoClicked().openInventory(new InvitePlayerMenu(getTeam()).getInventory());
   }
 }

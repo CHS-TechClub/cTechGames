@@ -15,3 +15,9 @@ commands:
   creategroup:
     description: Create a group!
     usage: /creategroup
+  join:
+    description: Join a group!
+    usage: /join <name>
+  leave:
+    description: Leave a group!
+    usage: /leave

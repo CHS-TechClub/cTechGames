@@ -2,17 +2,20 @@ package com.smp.player;
 
 import com.ctechcore.player.TechPlayer;
 import com.ctechcore.scoreboard.TechScoreboard;
+import com.ctechcore.teams.Team;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class SMPPlayer extends TechPlayer {
 
   private final TechScoreboard smpScoreboard;
+  private Team invitedTo;
 
   public SMPPlayer(Player player) {
     super(player);
 
     this.smpScoreboard = new TechScoreboard(getPlayer(), ChatColor.BOLD + "CTechSMP");
+    this.invitedTo = Team.NONE;
     detailScoreboard();
   }
 
@@ -33,6 +36,14 @@ public class SMPPlayer extends TechPlayer {
     this.smpScoreboard.setLine(13, getRank().getColor() + getRank().getName());
     this.smpScoreboard.setLine(10, "" + getCoins());
     this.smpScoreboard.setLine(7, getTeam().getColor() + getTeam().getName());
+  }
+
+  public boolean isInvitedTo(Team team) {
+    return team == this.invitedTo;
+  }
+
+  public void setInvitedTo(Team invitedTo) {
+    this.invitedTo = invitedTo;
   }
 
   @Override

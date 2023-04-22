@@ -3,7 +3,6 @@ package com.ctechcore.menu;
 import com.ctechcore.CTechCore;
 import com.ctechcore.listeners.BaseListener;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -15,7 +14,7 @@ import java.util.Hashtable;
 public class InventoryMenu extends BaseListener {
 
   private final Inventory inventory;
-  private final Hashtable<Material, InventoryItem> itemTable;
+  private final Hashtable<Integer, InventoryItem> itemTable;
 
   public InventoryMenu(CTechCore core, String name, int slots) {
     super(core);
@@ -25,7 +24,7 @@ public class InventoryMenu extends BaseListener {
     this.itemTable = new Hashtable<>();
   }
 
-  private Hashtable<Material, InventoryItem> getItemTable() {
+  private Hashtable<Integer, InventoryItem> getItemTable() {
     return itemTable;
   }
 
@@ -38,12 +37,13 @@ public class InventoryMenu extends BaseListener {
   }
 
   public void addInventoryItem(int slot, InventoryItem invItem) {
+    invItem.setSlot(slot);
     this.inventory.setItem(slot, invItem.getItem());
-    this.itemTable.putIfAbsent(invItem.getItem().getType(), invItem);
+    this.itemTable.put(slot, invItem);
   }
 
   public void removeInventoryItem(InventoryItem invItem) {
-    this.itemTable.remove(invItem.getItem().getType());
+    this.itemTable.remove(invItem.getSlot());
   }
 
   @EventHandler
@@ -52,8 +52,8 @@ public class InventoryMenu extends BaseListener {
     e.setCancelled(true);
     ItemStack clickedItem = e.getCurrentItem();
     if (clickedItem == null) return;
-    Hashtable<Material, InventoryItem> itemTable = getItemTable();
-    InventoryItem invItem = itemTable.get(clickedItem.getType());
+    Hashtable<Integer, InventoryItem> itemTable = getItemTable();
+    InventoryItem invItem = itemTable.get(e.getSlot());
     if (invItem == null) return;
 
     invItem.onItemClick(e);

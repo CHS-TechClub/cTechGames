@@ -14,6 +14,7 @@ public class GrantRankItem implements InventoryItem {
 
   private final Player player;
   private final Rank rank;
+  int slot;
 
   public GrantRankItem(Player player, Rank rank) {
     this.player = player;
@@ -26,6 +27,16 @@ public class GrantRankItem implements InventoryItem {
 
   public Rank getRank() {
     return rank;
+  }
+
+  @Override
+  public int getSlot() {
+    return slot;
+  }
+
+  @Override
+  public void setSlot(int slot) {
+    this.slot = slot;
   }
 
   @Override

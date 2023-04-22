@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 public class ModifyColorItem implements InventoryItem {
 
+  private int slot;
   private final Team team;
   private static final ItemStack ITEM = ItemUtil.createItem(
       Material.GRAY_DYE,
@@ -24,6 +25,16 @@ public class ModifyColorItem implements InventoryItem {
 
   public Team getTeam() {
     return team;
+  }
+
+  @Override
+  public int getSlot() {
+    return slot;
+  }
+
+  @Override
+  public void setSlot(int slot) {
+    this.slot = slot;
   }
 
   @Override

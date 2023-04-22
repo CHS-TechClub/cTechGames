@@ -42,7 +42,7 @@ public class TechPlayer {
       this.rank = Rank.getRankByName(rank);
 
       String team = (String) result.get("team");
-      this.team = CTechCore.getInstance().getTeamManager().getTeamByName(team);
+      setTeam(CTechCore.getInstance().getTeamManager().getTeamByName(team));
 
       resetTitle();
     });
@@ -74,7 +74,9 @@ public class TechPlayer {
   }
 
   public void setTeam(Team team) {
+    this.team.removePlayer(this);
     this.team = team;
+    this.team.addPlayer(this);
     resetTitle();
     CTechCore.getInstance().getDatabaseManager().saveTechPlayer(this);
   }
