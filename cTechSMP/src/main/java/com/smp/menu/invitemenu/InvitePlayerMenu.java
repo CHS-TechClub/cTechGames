@@ -12,7 +12,7 @@ public class InvitePlayerMenu extends InventoryMenu {
 
     int slot = 0;
     for (TechPlayer techPlayer : getCore().getTechPlayerManager().getTechPlayers()) {
-      if (techPlayer.getTeam() == Team.NONE) continue;
+      if (techPlayer.getTeam() != Team.NONE) continue;
       addInventoryItem(slot, new PlayerItem(((SMPPlayer) techPlayer), team));
       slot++;
     }
